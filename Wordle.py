@@ -29,26 +29,22 @@ def wordle():
             j+=1
 
         # evaluate if the guess is a word
-        if guess_to_check in FIVE_LETTER_WORDS:
+        if guess_to_check.lower() in FIVE_LETTER_WORDS:
             gw.show_message("great guess")
         else:
             gw.show_message("not in word list")
-        
 
  
     gw.add_enter_listener(enter_action)
 
-    random_word = random.choice(FIVE_LETTER_WORDS).upper()
-    print(random_word)
+    #random_word = random.choice(FIVE_LETTER_WORDS).upper()
+    #print(random_word)
     
-    for i, letter in enumerate(random_word):
-        if i < N_COLS:
+    #for i, letter in enumerate(random_word):
+        #if i < N_COLS:
             # Set the letter in the corresponding column
-            gw.set_square_letter(N_ROWS - guesses_left, i, letter)
+            #gw.set_square_letter(N_ROWS - guesses_left, i, letter)
     guesses_left-=1
-
-   
-    
 
 # Startup code
 
