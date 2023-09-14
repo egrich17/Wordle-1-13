@@ -30,9 +30,9 @@ def wordle():
 
         # evaluate if the guess is a word
         if guess_to_check.lower() in FIVE_LETTER_WORDS:
-            gw.show_message("great guess")
+            gw.show_message("Great guess!")
         else:
-            gw.show_message("not in word list")
+            gw.show_message("Not in word list. Please try again.")
 
  
     gw.add_enter_listener(enter_action)
