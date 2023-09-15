@@ -27,7 +27,6 @@ def wordle():
         while j< N_COLS:
             # Get the letter in the corresponding column
             current_letter = gw.get_square_letter(gw.get_current_row(), j)
-            print(current_letter)
             if current_letter in random_word:
                 gw.set_square_color(gw.get_current_row(), j, PRESENT_COLOR)
             else:
