@@ -19,6 +19,7 @@ def wordle():
     guesses_left = 6
 
     random_word = random.choice(FIVE_LETTER_WORDS).upper()
+    print(random_word)
 
     def enter_action(s):
 
@@ -28,8 +29,11 @@ def wordle():
             # Get the letter in the corresponding column
             current_letter = gw.get_square_letter(gw.get_current_row(), j)
             print(current_letter)
-            if current_letter in random_word:
-                gw.set_square_color(gw.get_current_row(), j, PRESENT_COLOR)
+            if current_letter == random_word[j]:
+                gw.set_square_color(gw.get_current_row(), j, CORRECT_COLOR)
+            elif current_letter in random_word:
+                if gw.get_square_color(gw.get_current_row(), j) != CORRECT_COLOR:
+                    gw.set_square_color(gw.get_current_row(), j, PRESENT_COLOR)
             else:
                 gw.set_square_color(gw.get_current_row(), j, MISSING_COLOR)
 
@@ -46,16 +50,23 @@ def wordle():
         else:
             gw.show_message("Not in word list. Please try again.")
 
+        if guess_to_check.lower() == random_word.lower():
+            gw.show_message("Correct!")
 
     gw.add_enter_listener(enter_action)
     
-    #for i, letter in enumerate(random_word):
-        #if i < N_COLS:
-            # Set the letter in the corresponding column
-            #gw.set_square_letter(N_ROWS - guesses_left, i, letter)
     guesses_left-=1
 
 # Startup code
 
 if __name__ == "__main__":
     wordle()
+
+
+
+
+
+    
+ 
+
+            
