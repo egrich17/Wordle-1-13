@@ -18,14 +18,12 @@ def wordle():
     gw = WordleGWindow()
     N_COLS = 5
     N_ROWS = 6
-
-
+    
     random_word = random.choice(FIVE_LETTER_WORDS).upper()
     print(random_word)
 
     def enter_action(s):
 
-        guesses_left = 5
 
         j=0
         i=0
@@ -36,14 +34,11 @@ def wordle():
             guess_to_check =guess_to_check+current_letter
             j+=1
     
-
         # evaluate if the guess is a word
         if guess_to_check.lower() in FIVE_LETTER_WORDS:
             gw.show_message("Great guess!")
-            guesses_left=guesses_left-1
             while i < N_COLS:
                 current_letter = gw.get_square_letter(gw.get_current_row(), i)
-                print(current_letter,random_word[i])
                 if current_letter == random_word[i]:
                     gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
                 elif current_letter in random_word:
@@ -52,20 +47,29 @@ def wordle():
                 else:
                     gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
                 i = i+1
-
             current_row = gw.get_current_row()
-            gw.set_current_row(current_row+1)
+
         else:
             gw.show_message("Not in word list. Please try again.")
 
-        if guess_to_check.lower() == random_word.lower():
-            end_game(guesses_left)
+        won = False
 
+        if guess_to_check.lower() == random_word.lower():
+                won = True
+                end_game(gw.get_current_row(), won)
+
+        if gw.get_current_row()== 5:
+            if guess_to_check.lower() == random_word.lower():
+                won = True
+                end_game(gw.get_current_row(), won)
+            end_game(gw.get_current_row(), won)
+
+        gw.set_current_row(current_row+1)
 
 
     gw.add_enter_listener(enter_action)
 
-    def end_game(guesses_left):
+    def end_game(guesses_used, won):
 
         one = 0
         two = 0
@@ -74,23 +78,23 @@ def wordle():
         five = 0
         six = 0
 
-        print(guesses_left)
-
-        if guesses_left == 0:
+        if guesses_used == 5:
             six = six +1
-        elif guesses_left ==1:
+        elif guesses_used ==4:
             five = five + 1
-        elif guesses_left ==2:
+        elif guesses_used ==3:
             four = four +1
-        elif guesses_left == 3:
+        elif guesses_used == 2:
             three = three +1
-        elif guesses_left== 4:
+        elif guesses_used== 1:
             two = two +1
-        elif guesses_left== 5:
+        elif guesses_used== 0:
             one = one +1
 
-        gw.show_message("Correct! Here are your statistics: \n 1 guess:" + str(one) + "\n 2 guesses:" + str(two) + "\n 3 guesses:" +str(three) + "\n 4 guesses:" + str(four) +"\n 5 guesses:"+ str(five))
-
+        if won:
+            gw.show_message("Correct! Here are your statistics: 1:" + str(one) + ", 2:" + str(two) + ", 3:" +str(three) + ", 4:" + str(four) +", 5:"+ str(five) + ", 6:"+ str(six))
+        else:
+            gw.show_message("You lost! Here are your statistics: 1:" + str(one) + ", 2:" + str(two) + ", 3:" +str(three) + ", 4:" + str(four) +", 5:"+ str(five)+ ", 6:" +str(six))
     
 # Startup code
 
