@@ -7,9 +7,10 @@ the 5-letter word of the day.
 """
 
 import random
+import tkinter
 
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, NEW_CORRECT_COLOR, NEW_MISSING_COLOR, NEW_PRESENT_COLOR
 
 
 
@@ -18,16 +19,34 @@ def wordle():
     gw = WordleGWindow()
     N_COLS = 5
     N_ROWS = 6
+    color_mode = "default" #set color mode to default
+
+    def color_mode_option():
+        nonlocal color_mode
+        #determine if on or off
+        if color_mode == "default":
+            color_mode = "bright"
+        else:
+            color_mode = "default"
+        color_mode_label.config(text="Color Mode: " + color_mode)  # Update label text
+
+    # display toggle screen for user to select default or bright mode
+    root = tkinter.Tk()
+    root.title("Wordle Color Mode")
+    color_mode_label = tkinter.Label(root, text="Color Mode: " + color_mode)
+    color_mode_label.pack()
+    toggle_button = tkinter.Button(root, text="Change Mode", command=color_mode_option)
+    toggle_button.pack()
     
+    # create random word of the day
     random_word = random.choice(FIVE_LETTER_WORDS).upper()
     print(random_word)
 
     def enter_action(s):
-
-
         j=0
         i=0
         guess_to_check=''
+        current_row = ''
         while j< N_COLS:
             # Get the letter in the corresponding column
             current_letter = gw.get_square_letter(gw.get_current_row(), j)
@@ -37,17 +56,32 @@ def wordle():
         # evaluate if the guess is a word
         if guess_to_check.lower() in FIVE_LETTER_WORDS:
             gw.show_message("Great guess!")
-            while i < N_COLS:
-                current_letter = gw.get_square_letter(gw.get_current_row(), i)
-                if current_letter == random_word[i]:
-                    gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
-                elif current_letter in random_word:
-                    if gw.get_square_color(gw.get_current_row(), i) != CORRECT_COLOR:
-                        gw.set_square_color(gw.get_current_row(), i, PRESENT_COLOR)
-                else:
-                    gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
-                i = i+1
-            current_row = gw.get_current_row()
+            # color scheme when user is in default mode
+            if color_mode == "default": 
+                while i < N_COLS:
+                    current_letter = gw.get_square_letter(gw.get_current_row(), i)
+                    if current_letter == random_word[i]:
+                        gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
+                    elif current_letter in random_word:
+                        if gw.get_square_color(gw.get_current_row(), i) != CORRECT_COLOR:
+                            gw.set_square_color(gw.get_current_row(), i, PRESENT_COLOR)
+                    else:
+                        gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
+                    i = i+1
+                current_row = gw.get_current_row()
+
+            else: # color scheme when user is in bright mode
+                while i < N_COLS:
+                    current_letter = gw.get_square_letter(gw.get_current_row(), i)
+                    if current_letter == random_word[i]:
+                        gw.set_square_color(gw.get_current_row(), i, NEW_CORRECT_COLOR)
+                    elif current_letter in random_word:
+                        if gw.get_square_color(gw.get_current_row(), i) != NEW_CORRECT_COLOR:
+                            gw.set_square_color(gw.get_current_row(), i, NEW_PRESENT_COLOR)
+                    else:
+                        gw.set_square_color(gw.get_current_row(), i, NEW_MISSING_COLOR)
+                    i = i+1
+                current_row = gw.get_current_row()
 
         else:
             gw.show_message("Not in word list. Please try again.")
@@ -65,7 +99,6 @@ def wordle():
             end_game(gw.get_current_row(), won)
 
         gw.set_current_row(current_row+1)
-
 
     gw.add_enter_listener(enter_action)
 
