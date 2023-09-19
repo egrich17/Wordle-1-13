@@ -18,12 +18,14 @@ def wordle():
     gw = WordleGWindow()
     N_COLS = 5
     N_ROWS = 6
-    guesses_left = 5
+
 
     random_word = random.choice(FIVE_LETTER_WORDS).upper()
     print(random_word)
 
     def enter_action(s):
+
+        guesses_left = 5
 
         j=0
         i=0
@@ -39,9 +41,9 @@ def wordle():
         if guess_to_check.lower() in FIVE_LETTER_WORDS:
             gw.show_message("Great guess!")
             guesses_left=guesses_left-1
-            print(guess_to_check)
-            print(random_word)
             while i < N_COLS:
+                current_letter = gw.get_square_letter(gw.get_current_row(), i)
+                print(current_letter,random_word[i])
                 if current_letter == random_word[i]:
                     gw.set_square_color(gw.get_current_row(), i, CORRECT_COLOR)
                 elif current_letter in random_word:
@@ -57,13 +59,13 @@ def wordle():
             gw.show_message("Not in word list. Please try again.")
 
         if guess_to_check.lower() == random_word.lower():
-            end_game()
+            end_game(guesses_left)
 
 
 
     gw.add_enter_listener(enter_action)
 
-    def end_game():
+    def end_game(guesses_left):
 
         one = 0
         two = 0
