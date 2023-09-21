@@ -112,7 +112,11 @@ def wordle():
                     end_game(gw.get_current_row(), won)
                 end_game(gw.get_current_row(), won)
 
-            gw.set_current_row(current_row+1)
+            # don't move to next row if last guess or invalid wor
+            if current_row < N_ROWS:
+                gw.set_current_row(current_row+1)
+                if guess_to_check.lower() not in FIVE_LETTER_WORDS:
+                    gw.set_current_row(current_row)
 
         gw.add_enter_listener(enter_action)
 
