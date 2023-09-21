@@ -92,8 +92,13 @@ def wordle():
                         i = i+1
                     current_row = gw.get_current_row()
 
+            # prevent user from entering an invalid guess
             else:
                 gw.show_message("Not in word list. Please try again.")
+                current_row = gw.get_current_row()
+                for i in range(N_COLS):
+                    gw.set_square_color(gw.get_current_row(), i, UNKNOWN_COLOR)
+                i-=1
 
             won = False
 
