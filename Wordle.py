@@ -20,10 +20,10 @@ five = 0
 six = 0
 
 def wordle():
-    keep_playing = tkinter.BooleanVar()
+    # keep_playing = tkinter.BooleanVar()
 
 
-    while keep_playing:
+    # while keep_playing:
 
         gw = WordleGWindow()
         N_COLS = 5
@@ -34,7 +34,7 @@ def wordle():
             nonlocal color_mode
             #determine if on or off
             if color_mode == "default":
-                color_mode = "bright"
+                color_mode = "pastel"
             else:
                 color_mode = "default"
             color_mode_label.config(text="Color Mode: " + color_mode)  # Update label text
