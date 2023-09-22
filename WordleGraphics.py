@@ -295,8 +295,7 @@ class WordleKey:
         fg = "White"
         if color == UNKNOWN_COLOR:
             fg = "Black"
-        self._canvas.itemconfig(self._frame, fill=color)
-        self._canvas.itemconfig(self._text, fill=fg)
+        self._canvas.itemconfig(self._frame, fill=color, outline=color)
 
 
 class WordleMessage:
