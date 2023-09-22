@@ -53,7 +53,8 @@ def wordle():
 
         # keep track of correct letters and keys
         correct_guesses = set()
-        key_colors = {}
+        correct_key_colors = {}
+        present_key_colors = {}
 
         def enter_action(s):
             j=0
@@ -91,7 +92,7 @@ def wordle():
                             correct_guesses.add(current_letter)
                             # set the key color to correct
                             gw.set_key_color(current_letter, CORRECT_COLOR)
-                            key_colors[current_letter] = CORRECT_COLOR
+                            correct_key_colors[current_letter] = CORRECT_COLOR
                         # if current letter is not in the word, set sqaure and keys to missing
                         else:
                             gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
@@ -105,19 +106,25 @@ def wordle():
                                 target_letter_counts[current_letter] -= 1
                                 # set key color to present
                                 gw.set_key_color(current_letter, PRESENT_COLOR)
+                                present_key_colors[current_letter] = PRESENT_COLOR
                             # account for word being guessed in the correct spot in a previous turn, but is now placed
                             # in different location
                             elif current_letter in correct_guesses and target_letter_counts[current_letter] > 1:
                                 gw.set_square_color(gw.get_current_row(), i, PRESENT_COLOR)
                                 gw.set_key_color(current_letter, PRESENT_COLOR)
+                                present_key_colors[current_letter] = PRESENT_COLOR
                             # if current letter is only in the word one time, multiple instances of the word should be marked missing
                             else:
                                 gw.set_square_color(gw.get_current_row(), i, MISSING_COLOR)
                                 gw.set_key_color(current_letter, MISSING_COLOR)
 
                         # ensure that once marked, correct keys stay in the color "correct"
-                        if current_letter in key_colors:
-                            gw.set_key_color(current_letter, key_colors[current_letter])
+                        if current_letter in correct_key_colors:
+                            gw.set_key_color(current_letter, correct_key_colors[current_letter])
+                        # ensure that correct or present keys guessed more than once don't get grayed out
+                        if current_letter not in correct_key_colors:
+                            if current_letter in present_key_colors:
+                                gw.set_key_color(current_letter, present_key_colors[current_letter])
 
                         i = i+1
                     current_row = gw.get_current_row()
@@ -137,7 +144,7 @@ def wordle():
                             correct_guesses.add(current_letter)
                             # set the key color to correct
                             gw.set_key_color(current_letter, NEW_CORRECT_COLOR)
-                            key_colors[current_letter] = NEW_CORRECT_COLOR
+                            correct_key_colors[current_letter] = NEW_CORRECT_COLOR
                         # if current letter is not in the word, set sqaure and keys to missing
                         else:
                             gw.set_square_color(gw.get_current_row(), i, NEW_MISSING_COLOR)
@@ -151,20 +158,26 @@ def wordle():
                                 target_letter_counts[current_letter] -= 1
                                 # set key color to present
                                 gw.set_key_color(current_letter, NEW_PRESENT_COLOR)
+                                present_key_colors[current_letter] = NEW_PRESENT_COLOR
                             # account for word being guessed in the correct spot in a previous turn, but is now placed
                             # in different location
                             elif current_letter in correct_guesses and target_letter_counts[current_letter] > 1:
                                 print(current_letter + " in correct guesses")
                                 gw.set_square_color(gw.get_current_row(), i, NEW_PRESENT_COLOR)
                                 gw.set_key_color(current_letter, NEW_PRESENT_COLOR)
+                                present_key_colors[current_letter] = NEW_PRESENT_COLOR
                             # if current letter is only in the word one time, multiple instances of the word should be marked missing
                             else:
                                 gw.set_square_color(gw.get_current_row(), i, NEW_MISSING_COLOR)
                                 gw.set_key_color(current_letter, NEW_MISSING_COLOR)
 
                         # ensure that once marked, correct keys stay in the color "correct"
-                        if current_letter in key_colors:
-                            gw.set_key_color(current_letter, key_colors[current_letter])
+                        if current_letter in correct_key_colors:
+                            gw.set_key_color(current_letter, correct_key_colors[current_letter])
+                        # ensure that correct or present keys guessed more than once don't get grayed out
+                        if current_letter not in correct_key_colors:
+                            if current_letter in present_key_colors:
+                                gw.set_key_color(current_letter, present_key_colors[current_letter])
 
                         i = i+1
                     current_row = gw.get_current_row()
