@@ -135,6 +135,7 @@ def wordle():
 
         # evaluate if the guess is a word
         if guess_to_check.lower() in FIVE_LETTER_WORDS:
+            good_guess = True
             gw.show_message("Great guess!")
             # color scheme when user is in default mode
             if color_mode == "default": 
@@ -246,15 +247,15 @@ def wordle():
 
         # prevent user from entering an invalid guess
         else:
+            good_guess = False
             gw.show_message("Not in word list. Please try again.")
-            gw.set_current_row(current_row-1)
-
+            gw.set_current_row(current_row)
 
         if gw.get_current_row()== 5:
             end_game(gw.get_current_row(), won, one, two, three, four, five, six)
 
         # don't move to next row if last guess or invalid word
-        if current_row < N_ROWS - 1 :
+        if current_row < N_ROWS - 1 and good_guess:
            gw.set_current_row(current_row+1)
             
     target_letter_counts = {}
