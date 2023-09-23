@@ -10,12 +10,11 @@ import random
 import tkinter
 
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, NEW_CORRECT_COLOR, NEW_MISSING_COLOR, NEW_PRESENT_COLOR
+from WordleGraphics import WordleGWindow,KEY_COLOR, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, NEW_CORRECT_COLOR, NEW_MISSING_COLOR, NEW_PRESENT_COLOR
 
 
 
 def wordle():
-
     one = 0
     two = 0
     three = 0
@@ -48,9 +47,7 @@ def wordle():
 
 
     
-    def play_game(one, two, three, four, five, six):
-
-        print("beginning of play game:", one, two, three, four, five, six)
+    def play_game():
 
         global random_word
 
@@ -63,32 +60,32 @@ def wordle():
         
         #clear keys
 
-        gw.set_key_color("A", MISSING_COLOR)
-        gw.set_key_color("B", MISSING_COLOR)
-        gw.set_key_color("C", MISSING_COLOR)
-        gw.set_key_color("D", MISSING_COLOR)
-        gw.set_key_color("E", MISSING_COLOR)
-        gw.set_key_color("F", MISSING_COLOR)
-        gw.set_key_color("G", MISSING_COLOR)
-        gw.set_key_color("H", MISSING_COLOR)
-        gw.set_key_color("I", MISSING_COLOR)
-        gw.set_key_color("J", MISSING_COLOR)
-        gw.set_key_color("K", MISSING_COLOR)
-        gw.set_key_color("L", MISSING_COLOR)
-        gw.set_key_color("M", MISSING_COLOR)
-        gw.set_key_color("N", MISSING_COLOR)
-        gw.set_key_color("O", MISSING_COLOR)
-        gw.set_key_color("P", MISSING_COLOR)
-        gw.set_key_color("Q", MISSING_COLOR)
-        gw.set_key_color("R", MISSING_COLOR)
-        gw.set_key_color("S", MISSING_COLOR)
-        gw.set_key_color("T", MISSING_COLOR)
-        gw.set_key_color("U", MISSING_COLOR)
-        gw.set_key_color("V", MISSING_COLOR)
-        gw.set_key_color("W", MISSING_COLOR)
-        gw.set_key_color("X", MISSING_COLOR)
-        gw.set_key_color("Y", MISSING_COLOR)
-        gw.set_key_color("Z", MISSING_COLOR)
+        gw.set_key_color("A", KEY_COLOR)
+        gw.set_key_color("B", KEY_COLOR)
+        gw.set_key_color("C", KEY_COLOR)
+        gw.set_key_color("D", KEY_COLOR)
+        gw.set_key_color("E", KEY_COLOR)
+        gw.set_key_color("F", KEY_COLOR)
+        gw.set_key_color("G", KEY_COLOR)
+        gw.set_key_color("H", KEY_COLOR)
+        gw.set_key_color("I", KEY_COLOR)
+        gw.set_key_color("J", KEY_COLOR)
+        gw.set_key_color("K", KEY_COLOR)
+        gw.set_key_color("L", KEY_COLOR)
+        gw.set_key_color("M", KEY_COLOR)
+        gw.set_key_color("N", KEY_COLOR)
+        gw.set_key_color("O", KEY_COLOR)
+        gw.set_key_color("P", KEY_COLOR)
+        gw.set_key_color("Q", KEY_COLOR)
+        gw.set_key_color("R", KEY_COLOR)
+        gw.set_key_color("S", KEY_COLOR)
+        gw.set_key_color("T", KEY_COLOR)
+        gw.set_key_color("U", KEY_COLOR)
+        gw.set_key_color("V", KEY_COLOR)
+        gw.set_key_color("W", KEY_COLOR)
+        gw.set_key_color("X", KEY_COLOR)
+        gw.set_key_color("Y", KEY_COLOR)
+        gw.set_key_color("Z", KEY_COLOR)
 
         gw.show_message("")
 
@@ -107,8 +104,6 @@ def wordle():
         # create random word of the day
         random_word = random.choice(FIVE_LETTER_WORDS).upper()
         print("Random word: " + random_word)
-        
-        print("end of play_game:", one, two, three, four, five, six)
 
 
 
@@ -117,9 +112,9 @@ def wordle():
     correct_key_colors = {}
     present_key_colors = {}
         
-    def enter_action(s):
 
-        print("right after enter action:", one, two, three, four, five, six)
+
+    def enter_action(s):
 
         guess_to_check = ''
         j=0
@@ -192,6 +187,12 @@ def wordle():
 
                     i = i+1
 
+            if guess_to_check.lower() == random_word.lower():
+                won = True
+                end_game(gw.get_current_row(), won, one, two, three, four, five, six)
+                current_row = gw.get_current_row()
+            # color scheme when user is in pastel mode
+
             if color_mode == "pastel": 
                 i = 0
                 # loop through each of the 5 letters
@@ -242,18 +243,11 @@ def wordle():
                             gw.set_key_color(current_letter, present_key_colors[current_letter])
 
                     i = i+1
-            print("right before word is evaluated:", one, two, three, four, five, six)
-            if guess_to_check.lower() == random_word.lower():
-                won = True
-                print("right before end_game is called:", one, two, three, four, five, six)
-                end_game(gw.get_current_row(), won, one, two, three, four, five, six)
-                current_row = gw.get_current_row()
-            # color scheme when user is in pastel mode
 
         # prevent user from entering an invalid guess
         else:
             gw.show_message("Not in word list. Please try again.")
-            gw.set_current_row(current_row)
+            gw.set_current_row(current_row-1)
 
 
         if gw.get_current_row()== 5:
@@ -261,15 +255,13 @@ def wordle():
 
         # don't move to next row if last guess or invalid word
         if current_row < N_ROWS - 1 :
-           gw.set_current_row(current_row)
+           gw.set_current_row(current_row+1)
             
     target_letter_counts = {}
     gw.add_enter_listener(enter_action)
 
 
     def end_game(guesses_used, won, one, two, three, four, five, six):
-
-        print("when end_game is called: ", one, two, three, four, five, six)
 
         if guesses_used == 5 and won == True:
             six = six +1
@@ -284,10 +276,10 @@ def wordle():
         elif guesses_used== 0:
             one = one +1
 
-        print("right after wins are updated: ", one, two, three, four, five, six)
+        print(one, two, three, four, five, six)
 
         window=tkinter.Tk()
-        btn = tkinter.Button(window, text="Play Again", fg='blue', command=lambda: play_game(one, two, three, four, five, six))
+        btn=tkinter.Button(window, text="Play Again", fg='blue', command=play_game)
         btn.place(x=200, y=400)
         if won:
             lbl=tkinter.Label(window, text="Correct! You won! Here are your statistics: \n 1:" + str(one) + "\n 2:" + str(two) + "\n 3:" +str(three) + "\n 4:" + str(four) +"\n 5:"+ str(five)+ "\n 6:" +str(six), font=("Helvetica", 16))
@@ -301,7 +293,7 @@ def wordle():
         window.mainloop()
 
     
-    play_game(one, two, three, four, five, six)
+    play_game()
 
        
 # Startup code
