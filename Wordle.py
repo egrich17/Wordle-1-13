@@ -12,25 +12,20 @@ import tkinter
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, NEW_CORRECT_COLOR, NEW_MISSING_COLOR, NEW_PRESENT_COLOR
 
-one = 0
-two = 0
-three = 0
-four = 0
-five = 0
-six = 0
+
 
 def wordle():
-    # keep_playing = tkinter.BooleanVar()
+    one = 0
+    two = 0
+    three = 0
+    four = 0
+    five = 0
+    six = 0
 
+    gw = WordleGWindow()
+    color_mode = "default" #set color mode to default
 
-    # while keep_playing:
-
-        gw = WordleGWindow()
-        N_COLS = 5
-        N_ROWS = 6
-        color_mode = "default" #set color mode to default
-
-        def color_mode_option():
+    def color_mode_option():
             nonlocal color_mode
             #determine if on or off
             if color_mode == "default":
@@ -39,14 +34,59 @@ def wordle():
                 color_mode = "default"
             color_mode_label.config(text="Color Mode: " + color_mode)  # Update label text
 
-        # display toggle screen for user to select default or bright mode
-        root = tkinter.Tk()
-        root.title("Wordle Color Mode")
-        color_mode_label = tkinter.Label(root, text="Color Mode: " + color_mode)
-        color_mode_label.pack()
-        toggle_button = tkinter.Button(root, text="Change Mode", command=color_mode_option)
-        toggle_button.pack()
+
+    # display toggle screen for user to select default or bright mode
+    root = tkinter.Tk()
+    root.title("Wordle Color Mode")
+    color_mode_label = tkinter.Label(root, text="Color Mode: " + color_mode)
+    color_mode_label.pack()
+    toggle_button = tkinter.Button(root, text="Change Mode", command=color_mode_option)
+    toggle_button.pack()
+
+    def play_game():
+        N_COLS = 5
+        N_ROWS = 6
         
+        #clear keys
+
+        gw.set_key_color("A", MISSING_COLOR)
+        gw.set_key_color("B", MISSING_COLOR)
+        gw.set_key_color("C", MISSING_COLOR)
+        gw.set_key_color("D", MISSING_COLOR)
+        gw.set_key_color("E", MISSING_COLOR)
+        gw.set_key_color("F", MISSING_COLOR)
+        gw.set_key_color("G", MISSING_COLOR)
+        gw.set_key_color("H", MISSING_COLOR)
+        gw.set_key_color("I", MISSING_COLOR)
+        gw.set_key_color("J", MISSING_COLOR)
+        gw.set_key_color("K", MISSING_COLOR)
+        gw.set_key_color("L", MISSING_COLOR)
+        gw.set_key_color("M", MISSING_COLOR)
+        gw.set_key_color("N", MISSING_COLOR)
+        gw.set_key_color("O", MISSING_COLOR)
+        gw.set_key_color("P", MISSING_COLOR)
+        gw.set_key_color("Q", MISSING_COLOR)
+        gw.set_key_color("R", MISSING_COLOR)
+        gw.set_key_color("S", MISSING_COLOR)
+        gw.set_key_color("T", MISSING_COLOR)
+        gw.set_key_color("U", MISSING_COLOR)
+        gw.set_key_color("V", MISSING_COLOR)
+        gw.set_key_color("W", MISSING_COLOR)
+        gw.set_key_color("X", MISSING_COLOR)
+        gw.set_key_color("Y", MISSING_COLOR)
+        gw.set_key_color("Z", MISSING_COLOR)
+
+        #clear board
+
+        k = 0
+        l = 0
+        while k < 6:
+            while l < 5:
+                gw.set_square_letter(k,l,'')
+                gw.set_square_color(k,l, UNKNOWN_COLOR)
+                l+=l
+        k+=k
+
         # create random word of the day
         random_word = random.choice(FIVE_LETTER_WORDS).upper()
         print(random_word)
@@ -194,15 +234,15 @@ def wordle():
 
             if guess_to_check.lower() == random_word.lower():
                     won = True
-                    end_game(gw.get_current_row(), won)
+                    end_game(gw.get_current_row(), won, one, two, three, four, five, six)
 
             if gw.get_current_row()== 5:
                 if guess_to_check.lower() == random_word.lower():
                     won = True
                     end_game(gw.get_current_row(), won)
-                end_game(gw.get_current_row(), won)
+                end_game(gw.get_current_row(), won, one, two, three, four, five, six)
 
-            # don't move to next row if last guess or invalid wor
+            # don't move to next row if last guess or invalid word
             if current_row < N_ROWS - 1 :
                 gw.set_current_row(current_row+1)
                 if guess_to_check.lower() not in FIVE_LETTER_WORDS:
@@ -211,7 +251,9 @@ def wordle():
         target_letter_counts = {}
         gw.add_enter_listener(enter_action)
 
-        def end_game(guesses_used, won):
+        def end_game(guesses_used, won, one, two, three, four, five, six):
+
+            print("end game is called")
 
             if guesses_used == 5:
                 six = six +1
@@ -227,33 +269,22 @@ def wordle():
                 one = one +1
 
             window=tkinter.Tk()
-            btn=tkinter.Button(window, text="This is Button widget", fg='blue', command=change_variable)
+            btn=tkinter.Button(window, text="Play Again", fg='blue', command=play_game)
             btn.place(x=200, y=400)
             if won:
                 lbl=tkinter.Label(window, text="Correct! You won! Here are your statistics: \n 1:" + str(one) + "\n 2:" + str(two) + "\n 3:" +str(three) + "\n 4:" + str(four) +"\n 5:"+ str(five)+ "\n 6:" +str(six), font=("Helvetica", 16))
                 lbl.place(x=60, y=50)
             else:
                 lbl=tkinter.Label(window, text="Game over! Here are your statistics: \n 1:" + str(one) + "\n 2:" + str(two) + "\n 3:" +str(three) + "\n 4:" + str(four) +"\n 5:"+ str(five)+ "\n 6:" +str(six), font=("Helvetica", 16))
-                #gw.show_message("You lost! Here are your statistics: 1:" + str(one) + ", 2:" + str(two) + ", 3:" +str(three) + ", 4:" + str(four) +", 5:"+ str(five)+ ", 6:" +str(six))
                 lbl.place(x=60, y=50)
             window.title('Game Summary')
             window.geometry("600x500+10+10")
             window.mainloop()
+    
+    play_game()
 
-            def change_variable():
-                button_pressed = True  # Change this to the new value you want to set
-                # keep_playing.set(button_pressed)
        
 # Startup code
 
 if __name__ == "__main__":
     wordle()
-
-
-
-
-
-    
- 
-
-            
