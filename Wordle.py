@@ -12,15 +12,14 @@ import tkinter
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow,KEY_COLOR, N_COLS, N_ROWS, PRESENT_COLOR, CORRECT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, NEW_CORRECT_COLOR, NEW_MISSING_COLOR, NEW_PRESENT_COLOR
 
-
+one = 0
+two = 0
+three = 0
+four = 0
+five = 0
+six = 0
 
 def wordle():
-    one = 0
-    two = 0
-    three = 0
-    four = 0
-    five = 0
-    six = 0
 
     window=None
 
@@ -111,8 +110,6 @@ def wordle():
     correct_guesses = set()
     correct_key_colors = {}
     present_key_colors = {}
-        
-
 
     def enter_action(s):
 
@@ -187,11 +184,6 @@ def wordle():
                             gw.set_key_color(current_letter, present_key_colors[current_letter])
 
                     i = i+1
-
-            if guess_to_check.lower() == random_word.lower():
-                won = True
-                end_game(gw.get_current_row(), won, one, two, three, four, five, six)
-                current_row = gw.get_current_row()
             # color scheme when user is in pastel mode
 
             if color_mode == "pastel": 
@@ -244,6 +236,10 @@ def wordle():
                             gw.set_key_color(current_letter, present_key_colors[current_letter])
 
                     i = i+1
+            if guess_to_check.lower() == random_word.lower():
+                won = True
+                end_game(gw.get_current_row(), won)
+                current_row = gw.get_current_row()
 
         # prevent user from entering an invalid guess
         else:
@@ -252,7 +248,7 @@ def wordle():
             gw.set_current_row(current_row)
 
         if gw.get_current_row()== 5:
-            end_game(gw.get_current_row(), won, one, two, three, four, five, six)
+            end_game(gw.get_current_row(), won)
 
         # don't move to next row if last guess or invalid word
         if current_row < N_ROWS - 1 and good_guess:
@@ -262,7 +258,9 @@ def wordle():
     gw.add_enter_listener(enter_action)
 
 
-    def end_game(guesses_used, won, one, two, three, four, five, six):
+    def end_game(guesses_used, won):
+
+        global one, two, three, four, five, six
 
         if guesses_used == 5 and won == True:
             six = six +1
@@ -276,8 +274,6 @@ def wordle():
             two = two +1
         elif guesses_used== 0:
             one = one +1
-
-        print(one, two, three, four, five, six)
 
         window=tkinter.Tk()
         btn=tkinter.Button(window, text="Play Again", fg='blue', command=play_game)
